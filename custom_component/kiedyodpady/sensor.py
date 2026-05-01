@@ -53,9 +53,7 @@ def get_icon_for_types(types: list[str]) -> str:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
-    session = async_get_clientsession(hass)
-    coordinator = KiedyOdpadyCoordinator(hass, session, entry.data)
-    await coordinator.async_config_entry_first_refresh()
+    coordinator = hass.data[DOMAIN][entry.entry_id]
 
     async_add_entities([
         KiedyOdpadyNextDateSensor(coordinator, entry),
