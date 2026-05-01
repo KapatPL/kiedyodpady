@@ -5,6 +5,7 @@
   "documentation": "https://github.com/KapatPL/kiedyodpady",
   "issue_tracker": "https://github.com/KapatPL/kiedyodpady/issues",
   "codeowners": ["@KapatPL"],
+  "config_flow": true,
   "requirements": [],
   "dependencies": [],
   "iot_class": "cloud_polling"
