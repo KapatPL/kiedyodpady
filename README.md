@@ -1,29 +1,26 @@
+# Opis
+
+Integracja pobierająca z [jozefow.kiedyodpady.pl](https://jozefow.kiedyodpady.pl/) informacjie o terminach i typach odbioru odpadów
+
+# Konfiguracja dodatku:
+## Dodanie niestandardowego repo hacs:
+
+[Dodaj repozytorium do HACS](https://my.home-assistant.io/redirect/hacs_repository/?owner=KapatPL&repository=kiedyodpady&category=integration)
+
+## Konfigurowanie integracji
+- Wybieramy typ zabudowy
+![Dodawanie integracji](images/integracja-dodawanie-edytor1.png)
+
+- Masto ustawiamy na Jozefów 
+![Dodawanie integracji](images/integracja-dodawanie-edytor2.png)
+
+- Wybieramy adres odbioru odpadów
+![Dodawanie integracji](images/integracja-dodawanie-edytor3.png)
+
+- Wybieramy numer budynku
+![Dodawanie integracji](images/integracja-dodawanie-edytor4.png)
+
+- Masto ustawiamy na Jozefów 
+![Dodawanie integracji](images/integracja-sensory.png)
 
 
-
-# Konfiguracja dodatku
-
-```
-localityId:       "0920404"                         # Kod Józefów
-streetId:         "19719"                           # id Ulicy
-number:           "4"                               # Numer Lokalu
-property_type:    "Zamieszkana"                     # Typ
-building_type:    "Jednorodzinna"                   # Typ
-origin: "https://jozefow.kiedyodpady.pl"            # Adres Strony
-```
-
-# Konfiguracja w dashboard
-```
-type: entities
-entities:
-  - entity: sensor.data_odbioru_odpadow
-    name: Data odbioru
-  - entity: sensor.co_odbieraja_odpady
-    name: Co odbierają
-  - entity: sensor.dni_do_odbioru_odpadow
-    name: Za ile dni
-theme: Mushroom Square Shadow
-show_header_toggle: false
-state_color: false
-title: Informacjie o odbiorze odpadów
-```
