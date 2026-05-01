@@ -50,6 +50,6 @@ class KiedyOdpadyEntity(CoordinatorEntity):
             "model": locality_name or "Harmonogram odbioru odpadów",
             "configuration_url": self.entry.data.get(CONF_ORIGIN),
             "suggested_area": "Odpady",
-            "sw_version": "0.1.0",
+            "sw_version": "0.0.1",
             "serial_number": f"{street_id}-{address}",
         }
