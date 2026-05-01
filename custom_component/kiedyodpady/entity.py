@@ -13,6 +13,19 @@ from .const import (
 )
 
 
+def get_next_event(coordinator, entry: ConfigEntry, include_collected: bool = False):
+    if not coordinator.data:
+        return None
+
+    collected_date = entry.options.get("collected_date")
+
+    for event in coordinator.data:
+        if include_collected or event["date"] != collected_date:
+            return event
+
+    return None
+
+
 class KiedyOdpadyEntity(CoordinatorEntity):
     def __init__(self, coordinator, entry: ConfigEntry):
         super().__init__(coordinator)

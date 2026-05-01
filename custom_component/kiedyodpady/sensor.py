@@ -20,7 +20,7 @@ from .const import (
     CONF_ORIGIN,
     WASTE_TYPES,
 )
-from .entity import KiedyOdpadyEntity
+from .entity import KiedyOdpadyEntity, get_next_event
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,12 +35,6 @@ WASTE_ICONS = {
     "Papier": "mdi:file-document-outline",
     "Szkło": "mdi:bottle-wine-outline",
 }
-
-
-def get_next_event(coordinator):
-    if not coordinator.data:
-        return None
-    return coordinator.data[0]
 
 
 def get_icon_for_types(types: list[str]) -> str:
@@ -140,7 +134,7 @@ class KiedyOdpadyNextDateSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def native_value(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return None
 
@@ -149,7 +143,7 @@ class KiedyOdpadyNextDateSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return {}
 
@@ -167,6 +161,7 @@ class KiedyOdpadyNextDateSensor(KiedyOdpadyEntity, SensorEntity):
                 }
                 for waste_type in event["types"]
             ],
+            "collected_date": self.entry.options.get("collected_date"),
             "schedule": self.coordinator.data,
         }
 
@@ -182,7 +177,7 @@ class KiedyOdpadyDisplayDateSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def native_value(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return None
 
@@ -199,7 +194,7 @@ class KiedyOdpadyTypesSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def native_value(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return None
 
@@ -207,7 +202,7 @@ class KiedyOdpadyTypesSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def icon(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return "mdi:trash-can-outline"
 
@@ -215,7 +210,7 @@ class KiedyOdpadyTypesSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def extra_state_attributes(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return {}
 
@@ -242,7 +237,7 @@ class KiedyOdpadyDaysUntilSensor(KiedyOdpadyEntity, SensorEntity):
 
     @property
     def native_value(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return None
 

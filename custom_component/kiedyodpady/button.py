@@ -5,13 +5,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .entity import KiedyOdpadyEntity
-
-
-def get_next_event(coordinator):
-    if not coordinator.data:
-        return None
-    return coordinator.data[0]
+from .entity import KiedyOdpadyEntity, get_next_event
 
 
 class KiedyOdpadyCollectedButton(KiedyOdpadyEntity, ButtonEntity):
@@ -24,7 +18,7 @@ class KiedyOdpadyCollectedButton(KiedyOdpadyEntity, ButtonEntity):
         self._attr_unique_id = f"{entry.entry_id}_waste_collection_collected_button"
 
     async def async_press(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return
 

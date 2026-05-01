@@ -7,13 +7,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .entity import KiedyOdpadyEntity
-
-
-def get_next_event(coordinator):
-    if not coordinator.data:
-        return None
-    return coordinator.data[0]
+from .entity import KiedyOdpadyEntity, get_next_event
 
 
 class KiedyOdpadySoonBinarySensor(KiedyOdpadyEntity, BinarySensorEntity):
@@ -27,19 +21,18 @@ class KiedyOdpadySoonBinarySensor(KiedyOdpadyEntity, BinarySensorEntity):
 
     @property
     def is_on(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return False
 
         event_date = event["date"]
         days_until = (datetime.fromisoformat(event_date).date() - datetime.now().date()).days
-        collected_date = self.entry.options.get("collected_date")
 
-        return 0 <= days_until <= 2 and collected_date != event_date
+        return 0 <= days_until <= 2
 
     @property
     def extra_state_attributes(self):
-        event = get_next_event(self.coordinator)
+        event = get_next_event(self.coordinator, self.entry)
         if not event:
             return {}
 
