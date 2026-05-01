@@ -1,11 +1,11 @@
 {
   "domain": "kiedyodpady",
   "name": "Kiedy Odpady",
-  "version": "0.0.1",
-  "codeowners": [],
-  "config_flow": true,
+  "version": "1.0.0",
+  "documentation": "https://github.com/KapatPL/kiedyodpady",
+  "issue_tracker": "https://github.com/KapatPL/kiedyodpady/issues",
+  "codeowners": ["@KapatPL"],
+  "requirements": [],
   "dependencies": [],
-  "documentation": "https://api.kiedyodpady.pl/public/schedules/find",
-  "iot_class": "cloud_polling",
-  "requirements": []
+  "iot_class": "cloud_polling"
 }
