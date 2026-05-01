@@ -5,8 +5,22 @@
       "user": {
         "data": {
           "origin": "mdi:web",
-          "locality_id": "mdi:city",
           "building_kind": "mdi:home-city"
+        }
+      },
+      "locality": {
+        "data": {
+          "locality_id": "mdi:city"
+        }
+      },
+      "street": {
+        "data": {
+          "street_id": "mdi:road"
+        }
+      },
+      "number": {
+        "data": {
+          "number": "mdi:home"
         }
       }
     }

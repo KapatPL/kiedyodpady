@@ -1,7 +1,9 @@
 DOMAIN = "kiedyodpady"
 
 CONF_LOCALITY_ID = "locality_id"
+CONF_LOCALITY_NAME = "locality_name"
 CONF_STREET_ID = "street_id"
+CONF_STREET_NAME = "street_name"
 CONF_NUMBER = "number"
 CONF_PROPERTY_TYPE = "property_type"
 CONF_BUILDING_TYPE = "building_type"

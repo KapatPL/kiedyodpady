@@ -7,7 +7,7 @@ from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, CoordinatorEntity
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util import dt as dt_util
 
 from .const import (
@@ -20,6 +20,7 @@ from .const import (
     CONF_ORIGIN,
     WASTE_TYPES,
 )
+from .entity import KiedyOdpadyEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -127,14 +128,14 @@ class KiedyOdpadyCoordinator(DataUpdateCoordinator):
         ]
 
 
-class KiedyOdpadyNextDateSensor(CoordinatorEntity, SensorEntity):
+class KiedyOdpadyNextDateSensor(KiedyOdpadyEntity, SensorEntity):
     _attr_has_entity_name = False
     _attr_name = "Następny odbiór"
     _attr_icon = "mdi:calendar-clock"
     _attr_device_class = SensorDeviceClass.TIMESTAMP
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):
-        super().__init__(coordinator)
+        super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}_next_waste_collection_date"
 
     @property
@@ -170,13 +171,13 @@ class KiedyOdpadyNextDateSensor(CoordinatorEntity, SensorEntity):
         }
 
 
-class KiedyOdpadyDisplayDateSensor(CoordinatorEntity, SensorEntity):
+class KiedyOdpadyDisplayDateSensor(KiedyOdpadyEntity, SensorEntity):
     _attr_has_entity_name = False
     _attr_name = "Data odbioru"
     _attr_icon = "mdi:calendar"
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):
-        super().__init__(coordinator)
+        super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}_waste_collection_display_date"
 
     @property
@@ -188,12 +189,12 @@ class KiedyOdpadyDisplayDateSensor(CoordinatorEntity, SensorEntity):
         return datetime.fromisoformat(event["date"]).strftime("%d.%m.%Y")
 
 
-class KiedyOdpadyTypesSensor(CoordinatorEntity, SensorEntity):
+class KiedyOdpadyTypesSensor(KiedyOdpadyEntity, SensorEntity):
     _attr_has_entity_name = False
     _attr_name = "Co odbierają"
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):
-        super().__init__(coordinator)
+        super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}_waste_collection_types"
 
     @property
@@ -230,13 +231,13 @@ class KiedyOdpadyTypesSensor(CoordinatorEntity, SensorEntity):
         }
 
 
-class KiedyOdpadyDaysUntilSensor(CoordinatorEntity, SensorEntity):
+class KiedyOdpadyDaysUntilSensor(KiedyOdpadyEntity, SensorEntity):
     _attr_has_entity_name = False
     _attr_name = "Dni do odbioru"
     _attr_icon = "mdi:timer-outline"
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):
-        super().__init__(coordinator)
+        super().__init__(coordinator, entry)
         self._attr_unique_id = f"{entry.entry_id}_waste_collection_days_until"
 
     @property

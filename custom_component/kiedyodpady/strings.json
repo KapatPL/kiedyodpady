@@ -1,0 +1,37 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kiedy Odpady",
+        "data": {
+          "origin": "Adres strony",
+          "building_kind": "Typ nieruchomości"
+        }
+      },
+      "locality": {
+        "title": "Wybierz miejscowość",
+        "data": {
+          "locality_id": "Miejscowość"
+        }
+      },
+      "street": {
+        "title": "Wybierz ulicę",
+        "data": {
+          "street_id": "Ulica"
+        }
+      },
+      "number": {
+        "title": "Wybierz numer",
+        "data": {
+          "number": "Numer"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Nie udało się połączyć z API kiedyodpady.pl"
+    },
+    "abort": {
+      "already_configured": "Ten adres jest już skonfigurowany"
+    }
+  }
+}

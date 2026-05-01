@@ -7,7 +7,9 @@ from homeassistant.helpers.selector import selector
 from .const import (
     DOMAIN,
     CONF_LOCALITY_ID,
+    CONF_LOCALITY_NAME,
     CONF_STREET_ID,
+    CONF_STREET_NAME,
     CONF_NUMBER,
     CONF_PROPERTY_TYPE,
     CONF_BUILDING_TYPE,
@@ -26,6 +28,7 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     def __init__(self):
         self._data = {}
+        self._localities = []
         self._streets = []
 
     def _headers(self):
@@ -55,15 +58,14 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._apply_building_kind()
 
             try:
-                await self._fetch_streets()
+                await self._fetch_localities()
             except Exception:
                 errors["base"] = "cannot_connect"
             else:
-                return await self.async_step_street()
+                return await self.async_step_locality()
 
         schema = vol.Schema({
             vol.Required(CONF_ORIGIN, default=DEFAULT_ORIGIN): str,
-            vol.Required(CONF_LOCALITY_ID, default="0920404"): str,
             vol.Required(CONF_BUILDING_KIND, default=DEFAULT_BUILDING_KIND): selector({
                 "select": {
                     "options": [
@@ -84,9 +86,54 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def async_step_locality(self, user_input=None):
+        errors = {}
+
+        if user_input is not None:
+            self._data.update(user_input)
+            self._data[CONF_LOCALITY_NAME] = self._get_selected_locality_name()
+
+            try:
+                await self._fetch_streets()
+            except Exception:
+                errors["base"] = "cannot_connect"
+            else:
+                return await self.async_step_street()
+
+        if not self._localities:
+            try:
+                await self._fetch_localities()
+            except Exception:
+                errors["base"] = "cannot_connect"
+
+        options = [
+            {
+                "value": locality["id"],
+                "label": locality.get("extendedName") or locality.get("name") or locality["id"],
+            }
+            for locality in self._localities
+        ]
+
+        schema = vol.Schema({
+            vol.Required(CONF_LOCALITY_ID): selector({
+                "select": {
+                    "options": options,
+                    "mode": "dropdown",
+                    "sort": True,
+                }
+            })
+        })
+
+        return self.async_show_form(
+            step_id="locality",
+            data_schema=schema,
+            errors=errors,
+        )
+
     async def async_step_street(self, user_input=None):
         if user_input is not None:
             self._data.update(user_input)
+            self._data[CONF_STREET_NAME] = self._get_selected_street_name()
             return await self.async_step_number()
 
         options = [
@@ -124,7 +171,7 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
             self._abort_if_unique_id_configured()
 
-            street_name = self._get_selected_street_name()
+            street_name = self._data.get(CONF_STREET_NAME) or self._get_selected_street_name()
             return self.async_create_entry(
                 title=f"{street_name} {self._data[CONF_NUMBER]}",
                 data=self._data,
@@ -160,6 +207,16 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
+    async def _fetch_localities(self):
+        session = async_get_clientsession(self.hass)
+        url = f"{API_BASE}/public/territory/localities"
+
+        async with session.get(url, headers=self._headers()) as resp:
+            if resp.status != 200:
+                raise RuntimeError(f"Localities API error: {resp.status}")
+
+            self._localities = await resp.json()
+
     async def _fetch_streets(self):
         session = async_get_clientsession(self.hass)
         locality_id = self._data[CONF_LOCALITY_ID]
@@ -184,6 +241,15 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 raise RuntimeError(f"Addresses API error: {resp.status}")
 
             return await resp.json()
+
+    def _get_selected_locality_name(self):
+        locality_id = self._data.get(CONF_LOCALITY_ID)
+
+        for locality in self._localities:
+            if locality.get("id") == locality_id:
+                return locality.get("extendedName") or locality.get("name") or locality_id
+
+        return locality_id
 
     def _get_selected_street_name(self):
         street_id = self._data.get(CONF_STREET_ID)
