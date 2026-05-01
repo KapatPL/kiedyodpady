@@ -17,8 +17,8 @@ def get_next_event(coordinator):
 
 
 class KiedyOdpadySoonBinarySensor(CoordinatorEntity, BinarySensorEntity):
-    _attr_has_entity_name = True
-    _attr_name = "Odbiór odpadów wkrótce"
+    _attr_has_entity_name = False
+    _attr_name = "Odbiór wkrótce"
     _attr_icon = "mdi:trash-can-clock"
 
     def __init__(self, coordinator, entry: ConfigEntry):

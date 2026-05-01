@@ -128,8 +128,8 @@ class KiedyOdpadyCoordinator(DataUpdateCoordinator):
 
 
 class KiedyOdpadyNextDateSensor(CoordinatorEntity, SensorEntity):
-    _attr_has_entity_name = True
-    _attr_name = "Następny odbiór odpadów"
+    _attr_has_entity_name = False
+    _attr_name = "Następny odbiór"
     _attr_icon = "mdi:calendar-clock"
     _attr_device_class = SensorDeviceClass.TIMESTAMP
 
@@ -171,8 +171,8 @@ class KiedyOdpadyNextDateSensor(CoordinatorEntity, SensorEntity):
 
 
 class KiedyOdpadyDisplayDateSensor(CoordinatorEntity, SensorEntity):
-    _attr_has_entity_name = True
-    _attr_name = "Data odbioru odpadów"
+    _attr_has_entity_name = False
+    _attr_name = "Data odbioru"
     _attr_icon = "mdi:calendar"
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):
@@ -189,8 +189,8 @@ class KiedyOdpadyDisplayDateSensor(CoordinatorEntity, SensorEntity):
 
 
 class KiedyOdpadyTypesSensor(CoordinatorEntity, SensorEntity):
-    _attr_has_entity_name = True
-    _attr_name = "Co odbierają odpady"
+    _attr_has_entity_name = False
+    _attr_name = "Co odbierają"
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):
         super().__init__(coordinator)
@@ -231,8 +231,8 @@ class KiedyOdpadyTypesSensor(CoordinatorEntity, SensorEntity):
 
 
 class KiedyOdpadyDaysUntilSensor(CoordinatorEntity, SensorEntity):
-    _attr_has_entity_name = True
-    _attr_name = "Dni do odbioru odpadów"
+    _attr_has_entity_name = False
+    _attr_name = "Dni do odbioru"
     _attr_icon = "mdi:timer-outline"
 
     def __init__(self, coordinator: KiedyOdpadyCoordinator, entry: ConfigEntry):

@@ -4,12 +4,9 @@
     "step": {
       "user": {
         "data": {
+          "origin": "mdi:web",
           "locality_id": "mdi:city",
-          "street_id": "mdi:road",
-          "number": "mdi:home",
-          "property_type": "mdi:home-city",
-          "building_type": "mdi:office-building",
-          "origin": "mdi:web"
+          "building_kind": "mdi:home-city"
         }
       }
     }

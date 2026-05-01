@@ -15,7 +15,7 @@ def get_next_event(coordinator):
 
 
 class KiedyOdpadyCollectedButton(CoordinatorEntity, ButtonEntity):
-    _attr_has_entity_name = True
+    _attr_has_entity_name = False
     _attr_name = "Śmieci odebrane"
     _attr_icon = "mdi:check-circle-outline"
 

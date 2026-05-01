@@ -13,8 +13,9 @@ from .const import (
     CONF_BUILDING_TYPE,
     CONF_ORIGIN,
     DEFAULT_ORIGIN,
-    DEFAULT_PROPERTY_TYPE,
-    DEFAULT_BUILDING_TYPE,
+    DEFAULT_BUILDING_KIND,
+    CONF_BUILDING_KIND,
+    BUILDING_KIND_OPTIONS,
 )
 
 API_BASE = "https://api.kiedyodpady.pl"
@@ -36,11 +37,22 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             "User-Agent": "Mozilla/5.0 HomeAssistant kiedyodpady custom integration",
         }
 
+    def _apply_building_kind(self):
+        building_kind = self._data.get(CONF_BUILDING_KIND)
+        building_option = BUILDING_KIND_OPTIONS.get(building_kind)
+
+        if not building_option:
+            return
+
+        self._data[CONF_PROPERTY_TYPE] = building_option[CONF_PROPERTY_TYPE]
+        self._data[CONF_BUILDING_TYPE] = building_option[CONF_BUILDING_TYPE]
+
     async def async_step_user(self, user_input=None):
         errors = {}
 
         if user_input is not None:
             self._data.update(user_input)
+            self._apply_building_kind()
 
             try:
                 await self._fetch_streets()
@@ -52,8 +64,18 @@ class KiedyOdpadyConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         schema = vol.Schema({
             vol.Required(CONF_ORIGIN, default=DEFAULT_ORIGIN): str,
             vol.Required(CONF_LOCALITY_ID, default="0920404"): str,
-            vol.Required(CONF_PROPERTY_TYPE, default=DEFAULT_PROPERTY_TYPE): str,
-            vol.Required(CONF_BUILDING_TYPE, default=DEFAULT_BUILDING_TYPE): str,
+            vol.Required(CONF_BUILDING_KIND, default=DEFAULT_BUILDING_KIND): selector({
+                "select": {
+                    "options": [
+                        {
+                            "value": key,
+                            "label": option["label"],
+                        }
+                        for key, option in BUILDING_KIND_OPTIONS.items()
+                    ],
+                    "mode": "dropdown",
+                }
+            }),
         })
 
         return self.async_show_form(
