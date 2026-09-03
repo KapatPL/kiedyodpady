@@ -13,7 +13,8 @@ DEFAULT_ORIGIN = "https://jozefow.kiedyodpady.pl"
 DEFAULT_BUILDING_KIND = "zamieszkana_jednorodzinna"
 
 WASTE_TYPES = {
-    "01887640-c4e2-4ee4-a9eb-f15ac6ed1a82": "Bio",
+    "01887640-c4e2-4ee4-a9eb-f15ac6ed1a82": "Bio Zielone",
+    "01a04201-b630-4f41-b8bc-5acbb7965815": "Bio Kuchenne"
     "01887642-b506-4f67-9db1-c14ff973d3a9": "Zielone",
     "01887640-9754-4439-b1f2-34cd3cbf2b6c": "Zmieszane",
     "01887643-ef73-43d7-81bd-fe8ac69e3721": "Metale i tworzywa sztuczne",
